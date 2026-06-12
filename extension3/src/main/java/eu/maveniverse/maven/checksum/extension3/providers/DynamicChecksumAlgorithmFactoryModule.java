@@ -36,6 +36,10 @@ public class DynamicChecksumAlgorithmFactoryModule extends AbstractModule {
 
         for (String algorithm : algorithms) {
             String extension = algorithm.toLowerCase(Locale.ROOT).replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+            // fix to align with existing extensions (all SHA-2 families do not have hash, SHA3 does)
+            if (extension.startsWith("sha-")) {
+                extension = "sha" + extension.substring(4);
+            }
             Supplier<MessageDigest> supplier = () -> {
                 try {
                     return MessageDigest.getInstance(algorithm);
