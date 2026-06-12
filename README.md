@@ -20,3 +20,6 @@ If you want to have extra set of (more advanced) artifacts in Resolver, just add
 or as project extension).
 
 That's it!
+
+
+Example session using this suite https://gist.github.com/cstamas/162452886922af5c8b4658202027c0d6
