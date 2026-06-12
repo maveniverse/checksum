@@ -1,8 +1,10 @@
 package eu.maveniverse.maven.checksum.extension3.providers;
 
+import static java.util.Objects.requireNonNull;
+
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.function.Supplier;
 import org.eclipse.aether.spi.connector.checksum.ChecksumAlgorithm;
 import org.eclipse.aether.spi.connector.checksum.ChecksumAlgorithmFactorySupport;
 import org.eclipse.aether.util.ChecksumUtils;
@@ -11,29 +13,28 @@ import org.eclipse.aether.util.ChecksumUtils;
  * Support class to implement {@link org.eclipse.aether.spi.connector.checksum.ChecksumAlgorithmFactory} based
  * on Java {@link MessageDigest}.
  */
-public abstract class MessageDigestChecksumAlgorithmFactorySupport extends ChecksumAlgorithmFactorySupport {
-    public MessageDigestChecksumAlgorithmFactorySupport(String name, String extension) {
+public class MessageDigestChecksumAlgorithmFactorySupport extends ChecksumAlgorithmFactorySupport {
+    private final Supplier<MessageDigest> messageDigestSupplier;
+
+    public MessageDigestChecksumAlgorithmFactorySupport(
+            String name, String extension, Supplier<MessageDigest> messageDigestSupplier) {
         super(name, extension);
+        this.messageDigestSupplier = requireNonNull(messageDigestSupplier);
     }
 
     @Override
     public ChecksumAlgorithm getAlgorithm() {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance(getName());
-            return new ChecksumAlgorithm() {
-                @Override
-                public void update(final ByteBuffer input) {
-                    messageDigest.update(input);
-                }
+        MessageDigest messageDigest = messageDigestSupplier.get();
+        return new ChecksumAlgorithm() {
+            @Override
+            public void update(final ByteBuffer input) {
+                messageDigest.update(input);
+            }
 
-                @Override
-                public String checksum() {
-                    return ChecksumUtils.toHexString(messageDigest.digest());
-                }
-            };
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(
-                    "MessageDigest algorithm " + getName() + " not supported, but is required by resolver.", e);
-        }
+            @Override
+            public String checksum() {
+                return ChecksumUtils.toHexString(messageDigest.digest());
+            }
+        };
     }
 }
