@@ -11,12 +11,14 @@ still going for a third-party plugin. That is just a loss and redundancy.
 This suite provides a Maven3 extension, that hugely broadens Resolver supported checksum algorithms.
 And provides a Maven3 plugin, that provides basic checksum ops.
 
-## Using it
+## Using plugin
 
 Plugin is usable standalone, to perform usual tasks: get list of supported checksums, checksum any file, or 
 checksum project artifacts and so on.
 
-If you want to have extra set of (more advanced) artifacts in Resolver, just add the extension to Maven (as user
+## Using extension
+
+If you want to have extra set of (more advanced) checksums in Resolver, just add the extension to Maven (as user
 or as project extension).
 
 That's it!
