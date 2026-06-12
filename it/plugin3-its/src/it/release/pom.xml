@@ -68,6 +68,9 @@
                             <goal>checksum-project</goal>
                         </goals>
                         <phase>package</phase>
+                        <configuration>
+                            <includedClassifiers>source-release</includedClassifiers>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
