@@ -8,5 +8,4 @@
 File buildLog = new File( basedir, 'build.log' )
 assert buildLog.exists()
 
-assert buildLog.text.contains ('BLAKE2B-512')
-assert buildLog.text.contains ('SHA3-512')
+assert buildLog.text.contains('-source-release.jar.sha512')

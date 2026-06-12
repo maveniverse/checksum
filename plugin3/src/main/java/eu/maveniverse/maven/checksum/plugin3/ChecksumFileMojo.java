@@ -12,31 +12,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import javax.inject.Inject;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.aether.spi.connector.checksum.ChecksumAlgorithmFactory;
-import org.eclipse.aether.spi.connector.checksum.ChecksumAlgorithmFactorySelector;
 import org.eclipse.aether.spi.connector.checksum.ChecksumAlgorithmHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Checksums given file with given algorithm, or "all".
  */
 @Mojo(name = "checksum-file", threadSafe = true, requiresProject = false)
-public class ChecksumFileMojo extends AbstractMojo {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    @Inject
-    private ChecksumAlgorithmFactorySelector checksumAlgorithmFactorySelector;
-
+public class ChecksumFileMojo extends ChecksumMojoSupport {
     /**
      * The existing file that should have checksums calculated.
      */
@@ -61,31 +48,18 @@ public class ChecksumFileMojo extends AbstractMojo {
             throw new MojoExecutionException("File " + file + " is not an existing file");
         }
 
-        List<ChecksumAlgorithmFactory> selectedFactories;
-        if ("all".equalsIgnoreCase(alg)) {
-            selectedFactories = new ArrayList<>(checksumAlgorithmFactorySelector.getChecksumAlgorithmFactories());
-        } else {
-            try {
-                selectedFactories = checksumAlgorithmFactorySelector.selectList(Arrays.asList(alg.split("[,;|]")));
-            } catch (IllegalArgumentException e) {
-                throw new MojoExecutionException("Algorithm " + alg + " is not supported", e);
-            }
-        }
+        Map<String, ChecksumAlgorithmFactory> selectedFactories = selectChecksumAlgorithmFactories(alg);
 
         try {
-            Map<String, String> result = ChecksumAlgorithmHelper.calculate(file, selectedFactories);
+            Map<String, String> result =
+                    ChecksumAlgorithmHelper.calculate(file, new ArrayList<>(selectedFactories.values()));
             logger.info("Calculated checksums for {}", file);
             for (Map.Entry<String, String> entry : result.entrySet()) {
                 if (write) {
                     Path checksumFile = file.toPath()
                             .getParent()
                             .resolve(file.getName() + "."
-                                    + selectedFactories.stream()
-                                            .filter(a -> entry.getKey().equals(a.getName()))
-                                            .findFirst()
-                                            .orElseThrow(() -> new NoSuchElementException(
-                                                    "Algorithm " + entry.getKey() + " missing"))
-                                            .getFileExtension());
+                                    + selectedFactories.get(entry.getKey()).getFileExtension());
                     Files.write(checksumFile, entry.getValue().getBytes(StandardCharsets.UTF_8));
                 }
                 logger.info(" * {} = {}", entry.getKey(), entry.getValue());

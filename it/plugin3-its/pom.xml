@@ -24,6 +24,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>eu.maveniverse.maven.checksum</groupId>
+      <artifactId>extension3</artifactId>
+    </dependency>
+    <dependency>
       <groupId>eu.maveniverse.maven.plugins</groupId>
       <artifactId>checksum-plugin3</artifactId>
     </dependency>

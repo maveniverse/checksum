@@ -78,7 +78,7 @@
     <dependencies>
       <!-- This reactor -->
       <dependency>
-        <groupId>eu.maveniverse.maven.checkum</groupId>
+        <groupId>eu.maveniverse.maven.checksum</groupId>
         <artifactId>extension3</artifactId>
         <version>${project.version}</version>
       </dependency>

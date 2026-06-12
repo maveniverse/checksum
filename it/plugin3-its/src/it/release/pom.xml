@@ -17,6 +17,13 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
 
+    <distributionManagement>
+        <repository>
+            <id>it</id>
+            <url>file:///${basedir}/target/repo</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -24,6 +31,29 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>empty.jar</file>
+                                    <type>jar</type>
+                                    <classifier>source-release</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>eu.maveniverse.maven.plugins</groupId>
                 <artifactId>checksum-plugin3</artifactId>
