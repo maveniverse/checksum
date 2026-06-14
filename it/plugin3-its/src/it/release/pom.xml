@@ -65,7 +65,7 @@
                     <execution>
                         <id>checksum-project</id>
                         <goals>
-                            <goal>checksum-project</goal>
+                            <goal>project</goal>
                         </goals>
                         <phase>package</phase>
                         <configuration>

@@ -16,10 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Just dump available checksum algorithm names.
+ * Just list available checksum algorithm names.
  */
-@Mojo(name = "dump-algorithms", threadSafe = true, requiresProject = false)
-public class DumpAlgorithmsMojo extends AbstractMojo {
+@Mojo(name = "list-algorithms", threadSafe = true, requiresProject = false)
+public class ListAlgorithmsMojo extends AbstractMojo {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Inject
