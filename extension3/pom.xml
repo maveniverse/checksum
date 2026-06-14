@@ -14,7 +14,7 @@
   <parent>
     <groupId>eu.maveniverse.maven.checksum</groupId>
     <artifactId>checksum</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>extension3</artifactId>
