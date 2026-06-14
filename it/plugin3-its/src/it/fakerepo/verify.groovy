@@ -14,3 +14,6 @@ def logTxt = buildLog.text
 
 assert logTxt.contains('[INFO]  * SHA-1 = 73bc5be628edeb297a1caf421a5a2e494798b92f') // Junit POM
 assert logTxt.contains('[INFO]  * SHA-1 = 8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12') // Junit JAR
+
+assert new File(basedir, 'repo/junit/junit/4.13.2/junit-4.13.2.pom.sha1').text.equals('73bc5be628edeb297a1caf421a5a2e494798b92f')
+assert new File(basedir, 'repo/junit/junit/4.13.2/junit-4.13.2.jar.sha1').text.equals('8ac9e16d933b6fb43bc7f576336b8f4d7eb5ba12')

@@ -62,8 +62,10 @@ public class DirectoryMojo extends ChecksumMojoSupport {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     String fileName = file.getFileName().toString();
-                    String extension = fileName.substring(fileName.lastIndexOf('.'));
-                    if (!checksumAlgorithmFactorySelector.isChecksumExtension(extension)) {
+                    int lastDotIndex = fileName.lastIndexOf('.');
+                    if (lastDotIndex == -1
+                            || !checksumAlgorithmFactorySelector.isChecksumExtension(
+                                    fileName.substring(lastDotIndex + 1))) {
                         Map<String, String> result = ChecksumAlgorithmHelper.calculate(
                                 file.toFile(), new ArrayList<>(selectedFactories.values()));
                         logger.info("Calculated checksums for {}", file);
