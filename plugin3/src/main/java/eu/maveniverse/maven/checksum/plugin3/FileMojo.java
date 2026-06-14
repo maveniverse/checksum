@@ -22,8 +22,8 @@ import org.eclipse.aether.spi.connector.checksum.ChecksumAlgorithmHelper;
 /**
  * Checksums given file with given algorithm, or "all".
  */
-@Mojo(name = "checksum-file", threadSafe = true, requiresProject = false)
-public class ChecksumFileMojo extends ChecksumMojoSupport {
+@Mojo(name = "file", threadSafe = true, requiresProject = false)
+public class FileMojo extends ChecksumMojoSupport {
     /**
      * The existing file that should have checksums calculated.
      */

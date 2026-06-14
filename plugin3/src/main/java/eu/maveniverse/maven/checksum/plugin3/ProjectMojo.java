@@ -30,8 +30,8 @@ import org.eclipse.aether.util.artifact.SubArtifact;
 /**
  * Checksums project artifacts with given algorithm, or "all" and attach checksums.
  */
-@Mojo(name = "checksum-project", threadSafe = true)
-public class ChecksumProjectMojo extends ChecksumMojoSupport {
+@Mojo(name = "project", threadSafe = true)
+public class ProjectMojo extends ChecksumMojoSupport {
     @Inject
     private MavenSession mavenSession;
 
