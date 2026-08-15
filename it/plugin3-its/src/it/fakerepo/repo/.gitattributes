@@ -1,0 +1,3 @@
+# for simplicity; we force lineending to unix to have stable hashes
+*.xml text eol=lf
+*.pom text eol=lf
