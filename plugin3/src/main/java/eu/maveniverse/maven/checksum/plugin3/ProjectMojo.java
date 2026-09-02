@@ -10,6 +10,7 @@ package eu.maveniverse.maven.checksum.plugin3;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,16 +63,17 @@ public class ProjectMojo extends ChecksumMojoSupport {
         List<Artifact> artifacts = collectArtifacts(currentProject, filter());
         Map<String, ChecksumAlgorithmFactory> selectedFactories = selectChecksumAlgorithmFactories(alg);
         try {
-            Path target = currentProject.getBasedir().toPath().resolve("target");
+            Path target = Paths.get(currentProject.getBuild().getDirectory())
+                    .toAbsolutePath()
+                    .normalize();
             Files.createDirectories(target);
             for (Artifact artifact : artifacts) {
                 Map<String, String> result = ChecksumAlgorithmHelper.calculate(
                         artifact.getFile(), new ArrayList<>(selectedFactories.values()));
                 logger.debug("Calculated checksums for {}", artifact);
-                String outputFileName = getOutputName(artifact);
                 for (Map.Entry<String, String> entry : result.entrySet()) {
                     String ext = selectedFactories.get(entry.getKey()).getFileExtension();
-                    Path checksumFile = target.resolve(outputFileName + "." + ext);
+                    Path checksumFile = target.resolve(getOutputName(artifact) + "." + ext);
                     Files.write(checksumFile, entry.getValue().getBytes(StandardCharsets.UTF_8));
                     Artifact checksumArtifact =
                             new SubArtifact(artifact, "*", "*." + ext).setFile(checksumFile.toFile());
