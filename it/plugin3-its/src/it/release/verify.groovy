@@ -12,6 +12,9 @@ assert buildLog.exists()
 
 assert buildLog.text.contains('-source-release.jar.sha512')
 
+// log should contain the SHA-512 checksum for artifact
+assert buildLog.text.contains('[INFO] smoke-0.1.0-SNAPSHOT-source-release.jar - SHA-512: 9301b7c832f7b6d39745c8fe65ae6d3ee828f809e2fb685e9613f3939c6d9ad509c84499a37dbfef2ffdffb7c21b6b4be7e25e72f63c1f435517d940a3fac3a9')
+
 def sha512checksums = []
 def dir = new File( basedir, 'target/repo' )
 dir.eachFileRecurse (FileType.FILES) { file ->

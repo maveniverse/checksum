@@ -80,7 +80,7 @@ public class ProjectMojo extends ChecksumMojoSupport {
                     if (attach) {
                         mavenProjectHelper.attachArtifact(currentProject, RepositoryUtils.toArtifact(checksumArtifact));
                     }
-                    logger.debug(" * {} > {}", entry.getKey(), checksumArtifact);
+                    logger.info("{} - {}: {}", outputFileName, entry.getKey(), entry.getValue());
                 }
             }
         } catch (Exception e) {
