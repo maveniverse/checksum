@@ -21,3 +21,6 @@ dir.eachFileRecurse (FileType.FILES) { file ->
 }
 
 assert sha512checksums.size() == 1 // only source bundle have it, nothing else
+
+// output should be stored in target directory
+assert new File( basedir, "target/smoke-0.1.0-SNAPSHOT-source-release.jar.sha512" ).exists()

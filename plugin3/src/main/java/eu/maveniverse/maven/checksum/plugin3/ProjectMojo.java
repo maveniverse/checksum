@@ -62,13 +62,16 @@ public class ProjectMojo extends ChecksumMojoSupport {
         List<Artifact> artifacts = collectArtifacts(currentProject, filter());
         Map<String, ChecksumAlgorithmFactory> selectedFactories = selectChecksumAlgorithmFactories(alg);
         try {
+            Path target = currentProject.getBasedir().toPath().resolve("target");
+            Files.createDirectories(target);
             for (Artifact artifact : artifacts) {
                 Map<String, String> result = ChecksumAlgorithmHelper.calculate(
                         artifact.getFile(), new ArrayList<>(selectedFactories.values()));
                 logger.debug("Calculated checksums for {}", artifact);
+                String outputFileName = getOutputName(artifact);
                 for (Map.Entry<String, String> entry : result.entrySet()) {
                     String ext = selectedFactories.get(entry.getKey()).getFileExtension();
-                    Path checksumFile = Files.createTempFile(artifact.getFile().getName(), ext);
+                    Path checksumFile = target.resolve(outputFileName + "." + ext);
                     Files.write(checksumFile, entry.getValue().getBytes(StandardCharsets.UTF_8));
                     Artifact checksumArtifact =
                             new SubArtifact(artifact, "*", "*." + ext).setFile(checksumFile.toFile());
@@ -80,6 +83,15 @@ public class ProjectMojo extends ChecksumMojoSupport {
             }
         } catch (Exception e) {
             throw new MojoExecutionException("Error while calculating checksums", e);
+        }
+    }
+
+    private String getOutputName(Artifact artifact) {
+        if (artifact.getClassifier().isEmpty()) {
+            return artifact.getArtifactId() + "-" + artifact.getBaseVersion() + "." + artifact.getExtension();
+        } else {
+            return artifact.getArtifactId() + "-" + artifact.getBaseVersion() + "-" + artifact.getClassifier() + "."
+                    + artifact.getExtension();
         }
     }
 
