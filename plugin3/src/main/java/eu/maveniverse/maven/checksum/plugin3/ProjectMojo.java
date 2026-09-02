@@ -73,7 +73,8 @@ public class ProjectMojo extends ChecksumMojoSupport {
                 logger.debug("Calculated checksums for {}", artifact);
                 for (Map.Entry<String, String> entry : result.entrySet()) {
                     String ext = selectedFactories.get(entry.getKey()).getFileExtension();
-                    Path checksumFile = target.resolve(getOutputName(artifact) + "." + ext);
+                    String outputFileName = getOutputName(artifact);
+                    Path checksumFile = target.resolve(outputFileName + "." + ext);
                     Files.write(checksumFile, entry.getValue().getBytes(StandardCharsets.UTF_8));
                     Artifact checksumArtifact =
                             new SubArtifact(artifact, "*", "*." + ext).setFile(checksumFile.toFile());
